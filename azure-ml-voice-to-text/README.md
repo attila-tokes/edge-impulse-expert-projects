@@ -2,15 +2,15 @@
 description: 
 ---
 
-# Voice-to-Text Application with Edge Impulse and Azure ML
+# Building a Voice-to-Text Application with Edge Impulse and Azure ML
 
-**Edge ML** allows using Machine Learning (ML) on Internet of Things (IoT) devices. This offers many advantages, such as reduced power consumption, low latency, reduced bandwidth, and increased privacy. 
+**Edge ML** enables developers to run Machine Learning (ML) on Internet of Things (IoT) and Edge devices. This offers many advantages, such as reduced power consumption, low latency, reduced bandwidth, and increased privacy. 
 
-On the other hand, Edge ML can also be limited in functionality, given the reduced hardware capability of the edge devices. In these cases, it can be a good idea to combine **Edge ML** with **Cloud ML** functionality. This is usually done by running an ML model on the Edge device continuously, combined with a Cloud endpoint which is only called by edge device when advanced functionality is needed.
+On the other hand, Edge ML can also be limited in functionality, given the reduced hardware capability of the edge devices. In these cases, it can be a good idea to combine **Edge ML** with **Cloud ML** functionality. This is usually done by running an ML model on the Edge device continuously, combined with a Cloud endpoint which is only called by the edge device when advanced functionality is needed.
 
 In this project, I will demonstrate how to create a solution using **Edge ML** functionality provided by **Edge Impulse**, in combination with a **Cloud ML** endpoint implemented with **Azure ML**.
 
-The project we will implement will be a **Voice-to-Text** solution running on a low power edge device like the Raspberry Pi. 
+In this project we will implement a **Voice-to-Text** solution running on a low power edge device like the Raspberry Pi. 
 
 ![](.assets/1-1-hardware.png)
 
