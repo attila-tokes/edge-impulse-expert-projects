@@ -88,9 +88,9 @@ Notebooks are a good way for experimenting with ML models. But, in order to make
 
 One way to do this is by using [**Azure Machine Learning Endpoints**](https://docs.microsoft.com/en-us/azure/machine-learning/concept-endpoints). Endpoints allows us to expose ML functionality over HTTPS endpoints, with features like SSL termination, authentication, DNS names and canary releases provided out-of-the-box.
 
-In order to deploy a ML Endpoint we need to setup two things: a [**Model**](https://docs.microsoft.com/en-us/azure/machine-learning/concept-train-machine-learning-model) and an [**Environment**](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-use-environments).
+In order to deploy an ML Endpoint we need to setup two things: a [**Model**](https://docs.microsoft.com/en-us/azure/machine-learning/concept-train-machine-learning-model) and an [**Environment**](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-use-environments).
 
-The **Model** contains a machine learning model packaged in some form. Supported formats are [Score Model](https://docs.microsoft.com/en-us/azure/machine-learning/component-reference/score-model), [MLFlow](https://mlflow.org/) and [Triton](https://github.com/triton-inference-server/server). The **Score Model** is the easiest option to implement. All we need is Python *"scoring file"* of the following form:
+The **Model** contains a machine learning model packaged in some form. Supported formats are [Score Model](https://docs.microsoft.com/en-us/azure/machine-learning/component-reference/score-model), [MLFlow](https://mlflow.org/) and [Triton](https://github.com/triton-inference-server/server). The **Score Model** is the easiest option to implement. All we need is a Python *"scoring file"* of the following form:
 ```py
 # The init() is called once at start-up
 def init():
@@ -102,37 +102,55 @@ def init():
 def run(data):    
     # ... run inference, and return the result ...
 ```
-Using this file Azure ML will create a simple web server that exposes a `/score` endpoint. This endpoint can be accessed using simple HTTP call.
+Using this file Azure ML will create a simple web server that exposes a `/score` endpoint. This endpoint can be accessed using a simple HTTP call.
 
 The scoring file for our voice-to-text application can be found in the `scoring-func/score_audio.py` file.
 
 We can upload this to Azure ML from the [Models](https://ml.azure.com/model/list) page:
-- first we need to select the *"Custom"* model type, and upload the `scoring-func` folder<br/>
+- first we need to select the *"Custom"* model type, and upload the `scoring-func` folder
+
 ![](.assets/2-8-azure-ml-model-create.png)
-- then we choose a name<br/>
+
+- then we choose a name
+
 ![](.assets/2-9-azure-ml-model-create-2.png)
-- and register the model<br/>
+
+- and register the model
+
 ![](.assets/2-10-azure-ml-model-create-3.png)
 
-Next we need an **Environment** in which the model can run. The Environment will define aspects such as the OS, Python version and libraries installed in the Docker container where the Model will run.
+Next we need an **Environment** in which the model can run. The Environment will define aspects such as the OS, Python version, and libraries installed in the Docker container where the Model will run.
 
 There are two types of models we can use:
-- **Curated Environments** - these are ready to used environments created by Microsoft, and they have popular ML frameworks like TensorFlow or PyTorch pre-installed 
+- **Curated Environments** - these are ready-to-use environments created by Microsoft, and they have popular ML frameworks like TensorFlow or PyTorch pre-installed 
 - **Custom Environments** - can be used we need custom libraries, or something that is not already present in the curated environments
 
-As our model uses custom Python libraries like `transformers`, we need a Custom Environment. This can be created from the [Environments](https://ml.azure.com/environments) page. We can choose to start from a Curated Environment, or we can use our own `Dockerfile`. After multiple tries, I ended up creating a Custom Environment based on the `mcr.microsoft.com/azureml/pytorch-1.10-ubuntu18.04-py37-cpu-inference` image. <br/> This is PyTorch based image, supporting only CPU inference. It also has Python 3.7 and the `transformers` library installed.
+As our model uses custom Python libraries like `transformers`, we need a Custom Environment. This can be created from the [Environments](https://ml.azure.com/environments) page. We can choose to start from a Curated Environment, or we can use our own `Dockerfile`. After multiple tries, I ended up creating a Custom Environment based on the `mcr.microsoft.com/azureml/pytorch-1.10-ubuntu18.04-py37-cpu-inference` image.
+
+This is PyTorch based image, supporting only CPU inference. It also has Python 3.7 and the `transformers` library installed.
+
 ![](.assets/2-11-azure-ml-custom-environment.png)
 
 After this we should be ready to create an **Endpoint**. In the [Endpoints](https://ml.azure.com/endpoints) page we need to do the following:
-- choose a name, the compute type *"Managed"*, and *"Key-based authentication"*<br/>
+
+- choose a name, the compute type *"Managed"*, and *"Key-based authentication"*
+
 ![](.assets/2-12-azure-ml-endpoint-create.png)
-- select the model we created earlier<br/>
+
+- select the model we created earlier
+
 ![](.assets/2-13-azure-ml-endpoint-create-2.png)
-- on the Environment page we select our Custom Environment<br/>
+
+- on the Environment page we select our Custom Environment
+
 ![](.assets/2-14-azure-ml-endpoint-create-3.png)
-- choose a VM type, and count to 1<br/>
+
+- choose a VM type, and count to 1
+
 ![](.assets/2-15-azure-ml-endpoint-create-4.png)
-- review and confirm the settings<br/>
+
+- review and confirm the settings
+
 ![](.assets/2-16-azure-ml-endpoint-create-5.png)
 
 The provisioning our endpoint will take a couple of minutes. When the endpoint is ready it should like something like:<br/>
