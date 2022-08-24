@@ -2,25 +2,25 @@
 description: 
 ---
 
-# Voice-to-Text app with Edge Impulse and Azure ML
+# Voice-to-Text Application with Edge Impulse and Azure ML
 
-**Edge ML** allows using Machine Learning (ML) on Internet of Things (IoT) devices. This offers many advantages, such as reduces power consumption, low latency, reduced bandwidth and improved privacy. 
+**Edge ML** allows using Machine Learning (ML) on Internet of Things (IoT) devices. This offers many advantages, such as reduced power consumption, low latency, reduced bandwidth, and increased privacy. 
 
-On the other hand Edge ML can also be limited in functionality, given the reduced hardware capability of the edge devices. In these cases can be a good idea to combine **Edge ML** with **Cloud ML** functionality. This is usually done by running an ML model on the Edge device continuously, combined with a Cloud endpoint which is only called by edge device when advanced functionality is needed.
+On the other hand, Edge ML can also be limited in functionality, given the reduced hardware capability of the edge devices. In these cases, it can be a good idea to combine **Edge ML** with **Cloud ML** functionality. This is usually done by running an ML model on the Edge device continuously, combined with a Cloud endpoint which is only called by edge device when advanced functionality is needed.
 
-In this project I will demonstrate how to create a solution using **Edge ML** functionality provided by **Edge Impulse**, in combination with a **Cloud ML** endpoint implemented with **Azure ML**.
+In this project, I will demonstrate how to create a solution using **Edge ML** functionality provided by **Edge Impulse**, in combination with a **Cloud ML** endpoint implemented with **Azure ML**.
 
 The project we will implement will be a **Voice-to-Text** solution running on a low power edge device like the Raspberry Pi. 
 
 ![](.assets/1-1-hardware.png)
 
-The device will be able to detect on keyword like *"Listen!"* and then record and translate voice to written text. The keyword detection will be implemented locally using an **Edge Impulse** model, while the voice-to-text transformation will use a model running in an **Azure ML** endpoint.
+The device will be able to detect a keyword like *"Listen!"* and then record and translate voice to written text. The keyword detection will be implemented locally using an **Edge Impulse** model, while the voice-to-text transformation will use a model running in an **Azure ML** endpoint.
 
-Bellow is short video showing the project in action:
+Below is short video showing the project in action:
 
-[![Demo](https://img.youtube.com/vi/A8Rg0UUKy8Q/0.jpg)](https://www.youtube.com/watch?v=A8Rg0UUKy8Q)
+{% embed url="https://www.youtube.com/watch?v=A8Rg0UUKy8Q" %}
 
-The following sections I will describe how such an application can be implemented. We will start with the voice-to-text endpoint implemented with Azure ML, and then we will integrate this into an Edge Impulse application running on the Raspberry Pi.
+In the following sections I will describe how such an application can be implemented. We will start with the voice-to-text endpoint implemented with Azure ML, and then we will integrate this into an Edge Impulse application running on the Raspberry Pi.
 
 ## Cloud ML with Azure ML
 
