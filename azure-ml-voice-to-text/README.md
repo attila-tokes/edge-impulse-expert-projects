@@ -145,21 +145,23 @@ After this we should be ready to create an **Endpoint**. In the [Endpoints](http
 
 ![](.assets/2-14-azure-ml-endpoint-create-3.png)
 
-- choose a VM type, and count to 1
+- choose a VM type, and set the Instance count to 1
 
 ![](.assets/2-15-azure-ml-endpoint-create-4.png)
 
-- review and confirm the settings
+- review and confirm the settings, and click **Create**
 
 ![](.assets/2-16-azure-ml-endpoint-create-5.png)
 
-The provisioning our endpoint will take a couple of minutes. When the endpoint is ready it should like something like:<br/>
+The provisioning of our endpoint will take a couple of minutes. When the endpoint is ready it should like something like:
+
 ![](.assets/2-17-azure-ml-endpoint-done.png)
 
-In order to consume the endpoint, we need to take note of the "REST endpoint" listed above, and as well the API Key from the Consume page:<br/>
+In order to consume the endpoint, we need to take note of the "REST endpoint" listed above, and as well the API Key from the **Consume** page:
+
 ![](.assets/2-18-azure-ml-endpoint-done-api-key.png)
 
-Using these two we should be able to make HTTP calls to our ML endpoint:
+Using these two pieces, we should now be able to make HTTP calls to our ML endpoint:
 ```
 POST /score HTTP/1.1
 Host: <name>.<region>.inference.ml.azure.com
@@ -168,7 +170,7 @@ Authorization: Bearer <api-key>
 <data>
 ```
 
-The endpoints accepts audio input as a numeric array in the `data` field. To call it with a real audio file we can use a client side Python script like this:
+The endpoint accepts audio input as a numeric array in the `data` field. To call it with a real audio file we can use a client side Python script like this:
 ```python
 from scipy.io import wavfile
 import requests
@@ -191,7 +193,7 @@ This should produce the same result as the one seen in the Jupyter notebook exam
 $ python3 sample-client.py
 
 Status code: 200
-Result: {'result': 'SHE HAD YOUR DUCK SUP AND GREASY WASHWATER ALL YEAR'}
+Result: {'result': 'SHE HAD YOUR DUCK SOUP AND GREASY WASHWATER ALL YEAR'}
 ```
 
 In the Monitoring tab we can see metrics like request count and latency:
