@@ -30,48 +30,56 @@ In this section I will show how to implement a voice-to-text translation endpoin
 
 ### The Model
 
-The machine learning model we will use for voice-to-text transformation is the [**Wav2vec 2.0**](https://ai.facebook.com/blog/wav2vec-20-learning-the-structure-of-speech-from-raw-audio/), more specifically a pre-trained version of it. Wav2vec 2.0 is the second version of a speech recognition model developed by Facebook / Meta researchers:
+The machine learning model we will use for voice-to-text transformation is the [**Wav2vec 2.0**](https://ai.facebook.com/blog/wav2vec-20-learning-the-structure-of-speech-from-raw-audio/) NLP framework, more specifically a pre-trained version of it. Wav2vec 2.0 is the second version of a speech recognition model developed by Facebook / Meta researchers:
 
 > ***Wav2vec 2.0: Learning the structure of speech from raw audio**<br/>
 > https://ai.facebook.com/blog/wav2vec-20-learning-the-structure-of-speech-from-raw-audio/*
 
-A [pre-trained version](https://huggingface.co/docs/transformers/model_doc/wav2vec2) of Wav2vec 2.0 is available trough the [🤗 Transformers](https://huggingface.co/docs/transformers/index) library. The pre-trained model supports both PyTorch and TensorFlow libraries. We will use it with PyTorch.
+A [pre-trained version](https://huggingface.co/docs/transformers/model_doc/wav2vec2) of Wav2vec 2.0 is available through the [🤗 Transformers](https://huggingface.co/docs/transformers/index) library. The pre-trained model supports both PyTorch and TensorFlow libraries. We will use it with PyTorch.
 
 ### Getting Started with Azure ML
 
 The functionality offered by Azure Machine Learning is accessed via the [**Azure ML Studio**](https://ml.azure.com/?tid=73ca4d26-c417-45d6-99b9-fe3b050cb52e&wsid=/subscriptions/ec0bd9e0-a8d0-42aa-a244-c9aa130dc6fd/resourcegroups/azure-ml/workspaces/AzureML).
 
-As a prerequisite to accessing Azure ML Studio, we will need an Azure account and an active subscription. Users new to Azure can also create a [free account](https://azure.microsoft.com/en-us/free/), with year of free services and some credits for experimentation.
+As a prerequisite to accessing Azure ML Studio, we will need an Azure account and an active Subscription. Users whoa are new to Azure can also create a [free account](https://azure.microsoft.com/en-us/free/), with one year of free services and some credits for experimentation.
 
-Opening [Azure ML Studio](https://ml.azure.com/?tid=73ca4d26-c417-45d6-99b9-fe3b050cb52e&wsid=/subscriptions/ec0bd9e0-a8d0-42aa-a244-c9aa130dc6fd/resourcegroups/azure-ml/workspaces/AzureML) lands us on a welcome page:<br/>
+Opening the [Azure ML Studio](https://ml.azure.com/?tid=73ca4d26-c417-45d6-99b9-fe3b050cb52e&wsid=/subscriptions/ec0bd9e0-a8d0-42aa-a244-c9aa130dc6fd/resourcegroups/azure-ml/workspaces/AzureML) brings us to a welcome page:
+
 ![](.assets/2-1-azure-ml-intro-screen.png)
 
-Here we can create a new **Workspace**, if we don't already have one:<br/>
+Here we can create a new **Workspace**, if we don't already have one:
+
 ![](.assets/2-2-azure-ml-create-workspace.png)
 
-When we enter the workspace we want to use, an page with an overview and quick actions is shown:<br/>
+When we enter the workspace we want to use, a page with an overview and quick actions is shown:
+
 ![](.assets/2-3-azure-ml-workspace-welcome.png)
 
 ### Jupyter Notebooks
 
-On the workspace overview page there are a couple of quick actions choose from. I think **Notebooks** can be a good starting point. Notebooks allows us to work with a custom version [Jupyter Notebook](https://jupyter.org/), a tool which should familiar for most people involved in ML projects.
+On the workspace overview page there are a couple of quick actions to choose from. I think **Notebooks** can be a good starting point. Notebooks allows us to work with a custom version of [Jupyter Notebook](https://jupyter.org/), a tool which should be familiar for most people involved with ML projects.
 
-On the [Notebooks page](https://ml.azure.com/fileexplorerAzNB), we can either choose to create a new notebook or to an upload existing one. I went ahead with a new notebook, as I wanted to experiment with the Wave2Vec 2.0 model.<br/>
+On the [Notebooks page](https://ml.azure.com/fileexplorerAzNB), we can either choose to create a new notebook, or to an upload existing one. I went ahead and created a new notebook, as I wanted to experiment with the Wave2Vec 2.0 model.
+
 ![](.assets/2-4-azure-ml-notebook-create.png)
 
 The *"Wave2vec 2.0 Demo"* notebook I used can be found [here](https://github.com/attila-tokes/edge-impulse-expert-projects/blob/main/azure-ml-voice-to-text/cloudml/notebooks/Voice-to-Text.ipynb).
 
-The interface of Notebooks is similar to what we have with a standard Jupyter install, but to run code we need an [**Azure Compute Instance**](https://docs.microsoft.com/en-us/azure/machine-learning/concept-compute-instance):<br/>
+The Notebooks interface is similar to that of a standard Jupyter install, but to run code we need an [**Azure Compute Instance**](https://docs.microsoft.com/en-us/azure/machine-learning/concept-compute-instance):
+
 ![](.assets/2-5-azure-ml-notebook-run.png)
 
-The compute instance can be created on-the-fly when we try to run the notebook:<br/>
-![](.assets/2-6-azure-ml-compute-instance.png)<br/>
-*(note: choosing the smallest and cheapest options should do the job)*
+The compute instance can be created on-the-fly when we try to run the notebook:
+
+![](.assets/2-6-azure-ml-compute-instance.png)
+
+*(note: choosing the smallest and cheapest options should be sufficient)*
 
 It takes a couple of seconds for the instance to be started, after which we should be able to run the demo. What it does is:
-- downloads a sample audio file (WAV), with a person saying: *"She had your duck sup and greasy washwater all year"*
+- downloads a sample audio file (WAV), with a person saying: *"She had your duck soup and greasy washwater all year"*
 - downloads a pre-trained version of the Wave2Vec 2.0 model (`wav2vec2-base-960h`)
-- runs the model on the sample audio file, and shows us the resulting transcript<br/>
+- runs the model on the sample audio file, and shows us the resulting transcript
+
 ![](.assets/2-7-azure-ml-notebook-result.png)
 
 ### ML Endpoints
