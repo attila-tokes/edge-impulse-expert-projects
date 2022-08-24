@@ -181,11 +181,29 @@ Azure ML supports two types of Kubernetes compute clusters:
 - [**Azure Kubernetes Service (AKS)**](https://azure.microsoft.com/en-us/services/kubernetes-service/#overview) cluster - these are fully managed clusters offered by Azure
 - [**Azure Arc**](https://azure.microsoft.com/en-us/services/azure-arc/#product-overview) enabled Kubernetes clusters - these are customer managed clusters connected to Azure via Arc
 
-Kubernetes clusters can be attached to Azure ML from the [Compute](https://ml.azure.com/compute/) view. After this we should be able ML Endpoint-s running on the attached Kubernetes computes.
-
 Running machine learning workloads on an already existing Kubernetes cluster can have many advantages, such as better resource utilization and scalability. On the other hand setting up a Kubernetes compute is not as easy, as just using managed computes.
 
-*[TODO] Try to make AKS work !?*
+To set a Kubernetes compute in Azure ML, first we need to install the Azure Kubernetes ML Extension to our K8S cluster. For this project, I used a Azure Kubernetes Service (AKS cluster) which looked like this:
+
+![](.assets/2-20-azure-ml-aks-cluster.png)
+
+The Azure ML Extension can be installed using Azure CLI, by running the following command:
+```
+$ az k8s-extension create --name <cluster-name> --extension-type Microsoft.AzureML.Kubernetes --config enableTraining=True enableInference=True inferenceRouterServiceType=LoadBalancer allowInsecureConnections=True inferenceLoadBalancerHA=False --cluster-type managedClusters --cluster-name <cluster-name> --resource-group <resource-group> --scope cluster
+```
+
+After the extension is installed successfully, the Kubernetes clusters can be attached to Azure ML from the [Compute](https://ml.azure.com/compute/) view:
+![](.assets/2-21-azure-ml-attach-compute.png)
+
+The attached Kubernetes Compute then can be used to create Endpoints with Kubernetes compute type:
+![](.assets/2-22-azure-ml-aks-endpoint.png)
+
+The deployed ML Endpoint will look and work similar to one with managed compute type:
+![](.assets/2-23-azure-ml-aks-endpoint.png)
+
+Using a `kubectl` CLI tool we can also see what resource Azure ML deployed in our Kubernetes Cluster:
+![](.assets/2-24-azure-ml-aks-resources.png)
+
 
 ### Azure ML CLI & SDK
 
