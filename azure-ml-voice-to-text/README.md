@@ -406,13 +406,13 @@ Platforms like **Edge Impulse** and **Azure ML** enable developers to create mac
 ## References
 
 1. Azure Machine Learning Documentation
-   https://docs.microsoft.com/en-us/azure/machine-learning/
+https://docs.microsoft.com/en-us/azure/machine-learning/
 
 2. Edge Impulse Documentation
-   https://docs.edgeimpulse.com/docs/
+https://docs.edgeimpulse.com/docs/
 
 3. Wav2vec 2.0: Learning the structure of speech from raw audio
-   https://ai.facebook.com/blog/wav2vec-20-learning-the-structure-of-speech-from-raw-audio/
+https://ai.facebook.com/blog/wav2vec-20-learning-the-structure-of-speech-from-raw-audio/
 
 4. Realizing Machine Learning anywhere with Azure Kubernetes Service and Arc-enabled Machine Learning
-   https://techcommunity.microsoft.com/t5/azure-arc-blog/realizing-machine-learning-anywhere-with-azure-kubernetes/ba-p/3470783
+https://techcommunity.microsoft.com/t5/azure-arc-blog/realizing-machine-learning-anywhere-with-azure-kubernetes/ba-p/3470783
