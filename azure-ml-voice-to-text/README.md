@@ -196,57 +196,59 @@ Status code: 200
 Result: {'result': 'SHE HAD YOUR DUCK SOUP AND GREASY WASHWATER ALL YEAR'}
 ```
 
-In the Monitoring tab we can see metrics like request count and latency:
+In the Monitoring tab we can see metrics like Request count and latency:
+
 ![](.assets/2-19-azure-ml-endpoint-monitor.png)
 
 ### Kubernetes Compute
 
-Until now we used the so called **Managed Compute Instances / Clusters** with Azure ML. Managed compute instances are Azure VM instances with lifecycle, OS updates, and software stack fully managed by Azure. When using Managed Compute Instances we are able to  select the VM instance type and size. Clusters can have either a fixed number of VM instances, or varying number of VM instances managed by a basic auto-scaling functionality. Virtual Machines with dedicated GPU-s are also supported. 
+Up to this point, we have used the **Managed Compute Instances / Clusters** with Azure ML. Managed Compute Instances are Azure VM instances with lifecycle, OS updates, and software stacks fully managed by Azure. When using Managed Compute Instances we are able to select the VM instance type and size. Clusters can have either a fixed number of VM instances, or varying number of VM instances managed by auto-scaling functionality. Virtual Machines with dedicated GPUs are also supported. 
 
-Along managed compute instances, Azure ML also supports a couple of other instance types. The most notable is [**Kubernetes**](https://kubernetes.io/) based compute clusters. Kubernetes is a widely used open-source container orchestration system. It supports automatic deployment, scaling and management of container based application. Thus, it is great choose for cloud based systems.
+Along with Managed Compute Instances, Azure ML also supports several other instance types. The most notable is [**Kubernetes**](https://kubernetes.io/) based compute clusters. Kubernetes is a widely used open-source container orchestration system. It supports automatic deployment, scaling and management of container based application. Thus, it is a great choice for cloud-based systems.
 
 Azure ML supports two types of Kubernetes compute clusters:
 - [**Azure Kubernetes Service (AKS)**](https://azure.microsoft.com/en-us/services/kubernetes-service/#overview) cluster - these are fully managed clusters offered by Azure
 - [**Azure Arc**](https://azure.microsoft.com/en-us/services/azure-arc/#product-overview) enabled Kubernetes clusters - these are customer managed clusters connected to Azure via Arc
 
-Kubernetes clusters can be attached to Azure ML from the [Compute](https://ml.azure.com/compute/) view. After this we should be able ML Endpoint-s running on the attached Kubernetes computes.
+Kubernetes clusters can be attached to Azure ML from the [Compute](https://ml.azure.com/compute/) view. After this we should be able to have ML Endpoints running on the attached Kubernetes compute nodes.
 
-Running machine learning workloads on an already existing Kubernetes cluster can have many advantages, such as better resource utilization and scalability. On the other hand setting up a Kubernetes compute is not as easy, as just using managed computes.
+Running machine learning workloads on an already existing Kubernetes cluster can have many advantages, such as better resource utilization and scalability. On the other hand, setting up a Kubernetes compute cluster is not as easy, so using a managed solution can be helpful.
 
 *[TODO] Try to make AKS work !?*
 
 ### Azure ML CLI & SDK
 
-**Azure ML Studio** offers a good visual UI for creating and managing Azure ML resources. For people using Azure ML for the first time, it offers a great overview of how to get started and what are available features of the platform.
+**Azure ML Studio** offers a good visual UI for creating and managing Azure ML resources. For people using Azure ML for the first time, it offers a great overview of how to get started and what features are available on the platform.
 
-On the other hand, the Azure ML also has **CLI**, and **Python SDK** for direct interaction from console and code:<br/>
+Additionally, Azure ML also has a **CLI**, and **Python SDK** for direct interaction from a console and code:
 > *What is Azure Machine Learning CLI & Python SDK v2? <br/>
 > https://docs.microsoft.com/en-us/azure/machine-learning/concept-v2*
 
-The Azure ML CLI and Python SDK allow enables engineers the use of the techniques of [**MLOps**](https://en.wikipedia.org/wiki/MLOps). Similar to DevOps, MLOps is a set of practices that allows the reliable and efficient management of AI / ML applications lifecycle. It enables processes like:
+The Azure ML CLI and Python SDK enable engineers the use [**MLOps**](https://en.wikipedia.org/wiki/MLOps) techniques. Similar to DevOps, MLOps is a set of practices that allows the reliable and efficient management of AI / ML application lifecycle. It enables processes like:
 - deployment automation
 - consistent and repeatable deployment
 - ability to create / manage / deploy resources programmatically
-- continuos integration and development (CI/CD)
+- continuous integration and development (CI/CD)
 
 ## Edge ML with Edge Impulse
 
 [**Edge Impulse**](https://www.edgeimpulse.com/) is the leading development platform for Edge Machine Learning (Edge ML). It enables the creation of smart solutions via efficient machine learning models running on edge devices.
 
-As a demonstration we will implement a Voice-to-Text application on a Raspberry Pi. The solution will feature a **keyword spotting** model implemented with **Edge Impulse**, as as well the Cloud ML endpoint we created in the previous section.
+As a demonstration we will implement a voice-to-text application on a Raspberry Pi. The solution will feature a **keyword spotting** model implemented with **Edge Impulse**, as as well the Cloud ML endpoint we created in the previous section.
 
 ### Hardware
 
-The hardware we will use is a **Raspberry Pi 4 (2GB)** development board, along with a Logitech USB headset used as the microphone input.<br/>
+The hardware we will use is a **Raspberry Pi 4 (2GB)** development board, along with a Logitech USB headset used as the microphone input.
+
 ![](.assets/1-1-hardware.png)
 
-The **Raspberry Pi 4** is relatively low power single board computer popular among makers. It is a [fully supported Edge Impulse development board](https://docs.edgeimpulse.com/docs/development-platforms/fully-supported-development-boards). As a note, we are using a Raspberry Pi 4 mostly for convenience. The project probably could be implemented on any of the supported development boards with a microphone and Internet connectivity. The tools / programming languages may differ.
+The **Raspberry Pi 4** is a relatively low power single board computer, popular among makers. It is a [fully supported Edge Impulse development board](https://docs.edgeimpulse.com/docs/development-platforms/fully-supported-development-boards). As a note, we are using a Raspberry Pi 4 mostly for convenience. The project probably could be implemented on any of the supported development boards with a microphone and Internet connectivity. The tools / programming languages may differ.
 
-The **Raspberry Pi 4** can be set up the standard way. The Raspberry Pi OS is flashed on a SD Card, then we set up network connectivity / Wifi and SSH access. The official documentation describes in great details how to do this:
+The **Raspberry Pi 4** can be set up the standard way. The Raspberry Pi OS is flashed to an SD Card, then we set up network connectivity / Wifi and SSH access. The official documentation describes in great details how to do this:
 > ***Setting up your Raspberry Pi** <br/>
 > https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up/0*
 
-Next, there are couple steps to be done in order to connect the device to EdgeImpulse. The goal is to install `edge-impulse-linux` utility, which can be done as follows:
+Next, there are couple steps to be done in order to connect the device to EdgeImpulse. The goal is to install the `edge-impulse-linux` utility, which can be done as follows:
 ```sh
 $ curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
 $ sudo apt install -y gcc g++ make build-essential nodejs sox gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-base gstreamer1.0-plugins-base-apps
@@ -258,25 +260,29 @@ After running these commands, we should be able to connect to Edge Impulse Studi
 $ edge-impulse-linux --disable-camera
 ```
 
-The full set of instruction can be found in the [official guide](https://docs.edgeimpulse.com/docs/development-platforms/officially-supported-cpu-gpu-targets/raspberry-pi-4).
+The full set of instructions can be found in the [official guide](https://docs.edgeimpulse.com/docs/development-platforms/officially-supported-cpu-gpu-targets/raspberry-pi-4).
 
 ### Audio Project with Raspberry Pi
 
-Next we can login [**Edge Impulse Studio**](https://studio.edgeimpulse.com/), and create a new project:<br/>
+Next, we can login to the [**Edge Impulse Studio**](https://studio.edgeimpulse.com/), and create a new project:
+
 ![](.assets/3-1-edgimpl-create-project.png)
 
-and select the Audio project template<br/>
+and select the Audio project template
+
 ![](.assets/3-2-edgimpl-project-welcome.png)
 
-At this point, among other things, Studio offers us to connect a device to this project.<br/>
+At this point, among other things, Studio offers us to connect a device to this project.
+
 ![](.assets/3-3-edgimpl-select-device.png)
 
-After we select *"Connect your development board"*, we need to launch `edge-impulse-linux` on the Raspberry Pi:<br/>
+After we select *"Connect your development board"*, we need to launch `edge-impulse-linux` on the Raspberry Pi:
+
 ![](.assets/3-4-edgimpl-select-device-2.png)
 
-The tool asks us to login to Edge Impulse, select a project and a microphone to be used. After completing these steps the device should show up the in the Devices tab:<br/>
-![](.assets/3-5-edgimpl-select-device-3.png)
+The tool asks us to login to Edge Impulse, select a project and a microphone to be used. After completing these steps the device should show up the in the Devices tab:
 
+![](.assets/3-5-edgimpl-select-device-3.png)
 
 ### Data Collection
 
@@ -284,66 +290,77 @@ Now we can start building our **keyword spotting** model. Edge Impulse has a gre
 > ***Responding to your voice**
 > https://docs.edgeimpulse.com/docs/tutorials/responding-to-your-voice*
 
-The first step in training a keyword spotting model is to collect a set of samples of the word we want to detect. This can be done in the Data Acquisition tab:<br/>
+The first step in training a keyword spotting model is to collect a set of samples of the word we want to detect. This can be done in the Data Acquisition tab:
+
 ![](.assets/3-6-edgimpl-data-aq.png)
 
-In our case the word we want to detect is "Listen!", so I collected about 3 minutes of audio data, which contained about ~ 130 samples of the word "Listen!":<br/>
+In our case the word we want to detect is "Listen!", so I collected about 3 minutes of audio data, which contained about ~ 130 samples of the word "Listen!":
+
 ![](.assets/3-7-edgimpl-data-aq-2.png)
 
-Initially the data collection produces a single sample. This need to be split up, so that each sample contains one instance of the word. Fortunately, this is easily done by selecting the Split Sample option from the context menu:<br/>
+Initially the data collection produces a single sample. This needs to be split up, so that each sample contains one instance of the word. Fortunately, this is easily done by selecting the Split Sample option from the context menu:
+
 ![](.assets/3-8-edgimpl-data-split.png)
 
-As a note, I ended up re-doing the data acquisition process, as I realized the recorded audio had a 50Hz mains interference noise picked up from the power supply of the Raspberry PI. To fix this, I switched to using a power bank instead of a wall power supply and re-did the data collection.
+As a note, I ended up re-doing the data acquisition process, as I realized the recorded audio had a 50Hz mains interference noise picked up from the power supply of the Raspberry Pi. To fix this, I switched to using a power bank instead of a wall power supply and re-did the data collection.
 
-Along the keyword samples, we will also need some sample for other categories such as *"Noise"* and *"Unknown"* words. Luckily Edge Impulse already already has a pre-built [keyword spotting dataset](https://docs.edgeimpulse.com/docs/pre-built-datasets/keyword-spotting), which already contains samples for this classes.
+Along with the recorded keyword samples, we will also need some sample for other categories such as *"Noise"* and *"Unknown"* words. Luckily Edge Impulse already has a pre-built [keyword spotting dataset](https://docs.edgeimpulse.com/docs/pre-built-datasets/keyword-spotting), which contains samples for these classes.
 
 To use these samples we can:
+
 - download the dataset to the Raspberry Pi
 ```
 $ wget https://cdn.edgeimpulse.com/datasets/keywords2.zip
 $ unzip keywords2.zip
 ```
-- reduce the number of samples to about ~130 / class *(so that matches the `Listen!` samples we have)*:
+
+- reduce the number of samples to about ~130 per class *(so that it matches the `Listen!` samples we have)*:
 ```
 $ find noise/ | sort -R | tail +130 | xargs -n 1 -I % rm %
 $ find unknown/ | sort -R | tail +130 | xargs -n 1 -I % rm %
 ```
+
 - use the [Edge Impulse Uploader](https://docs.edgeimpulse.com/docs/edge-impulse-cli/cli-uploader) tool to upload the samples to our project:
 ```
 $ edge-impulse-uploader --label noise --category split noise/*.wav
 $ edge-impulse-uploader --label unknown --category split unknown/*.wav
 ```
 
-The samples should appear in Edge Impulse, and we should see that samples for the 3 classes (`listen`, `noise`, `unknown`) are evenly distributed:<br/>
+The samples should appear in Edge Impulse, and we should see that samples for the 3 classes (`listen`, `noise`, `unknown`) are evenly distributed:
+
 ![](.assets/3-9-edgimpl-data-3-classes.png)
 
 ### Training a Keyword Spotting Model
 
-At this point or dataset is complete, and we should start building and training an ML pipeline / Impulse. This is relatively easy, as we can create an Impulse containing:
+At this point our dataset is complete, and we can start building and training an ML pipeline / Impulse. This is relatively easy, as we can create an Impulse containing:
 - a [Time series data](https://docs.edgeimpulse.com/docs/edge-impulse-studio/impulse-design#input-block) input with windows size of 1 sec
 - an [Audio MFCC](https://docs.edgeimpulse.com/docs/edge-impulse-studio/processing-blocks/audio-mfcc) processing block, which extracts cepstral coefficients from the audio data
 - a [Classification (Keras)](https://docs.edgeimpulse.com/docs/edge-impulse-studio/learning-blocks/classification) neural network based learning block
-- an Output block for our 3 classes<br/>
+- an Output block for our 3 classes
+
 ![](.assets/3-10-edgimpl-impulse.png)
 
-The [**MFCC *(Mel Frequency Cepstral Coefficients)***](https://docs.edgeimpulse.com/docs/edge-impulse-studio/processing-blocks/audio-mfcc) block extracts coefficients from an audio signal. For keyword spotting, training it with the default parameters usually works:<br/>
+The [**MFCC *(Mel Frequency Cepstral Coefficients)***](https://docs.edgeimpulse.com/docs/edge-impulse-studio/processing-blocks/audio-mfcc) block extracts coefficients from an audio signal. For keyword spotting, training it with the default parameters usually works:
+
 ![](.assets/3-11-edgimpl-mfcc.png)
 
-The [**NN Classifier**](https://docs.edgeimpulse.com/docs/edge-impulse-studio/learning-blocks/classification) block is a neural network classifier, that takes the cepstral coefficients produced by the MFCC block, and tries to predict our 3 classes from it. We can train it with the default setting, but we also have the possibility to add some noise and randomness to the inputs:<br/>
+The [**NN Classifier**](https://docs.edgeimpulse.com/docs/edge-impulse-studio/learning-blocks/classification) block is a neural network classifier, that takes the cepstral coefficients produced by the MFCC block, and tries to predict our 3 classes from it. We can train it with the default setting, but we also have the possibility to add some noise and randomness to the inputs:
+
 ![](.assets/3-12-edgimpl-nn-classifier.png)
 
 The overall accuracy I got is 96.8%, which is pretty good. In the Data Explorer section we can see that sample of our keyword (`listen`) are clearly separated from the `unknown` and `noise` samples.
 
-Our Impulse at this point is ready to be used. We can try out in the Live classification tab.
+Our Impulse at this point is ready to be used. We can try it out in the Live classification tab.
 
 ### Raspberry Pi Deployment
 
 The next step is to deploy the model as a standalone app on the Raspberry Pi. One way to do this is to use the `edge-impulse-linux-runner` app. 
 
-The `edge-impulse-linux-runner` tool automatically download and optimize the model for the Raspberry Pi. Then it runs a sample app that continuously analyses the input audio, and gives the probabilities of the predicted classes:<br/>
+The `edge-impulse-linux-runner` tool automatically downloads and optimizes the model for the Raspberry Pi. Then it runs a sample app that continuously analyses the input audio, and gives the probabilities of the predicted classes:
+
 ![](.assets/3-13-edgimpl-runner.png)
 
-If we want to modify / extend this application we can use of the [**Edge Impulse SDK**](https://docs.edgeimpulse.com/docs/edge-impulse-for-linux/edge-impulse-for-linux)-s offered for Linux development boards. I opted for the Python SDK, which can be installed on the Raspberry Pi as follows:
+If we want to modify / extend this application we can make use of the [**Edge Impulse SDKs**](https://docs.edgeimpulse.com/docs/edge-impulse-for-linux/edge-impulse-for-linux) offered for Linux development boards. I opted for the Python SDK, which can be installed on the Raspberry Pi as follows:
 ```
 $ sudo apt-get install libatlas-base-dev libportaudio2 libportaudiocpp0 portaudio19-dev
 $ pip3 install edge_impulse_linux -i https://pypi.python.org/simple
@@ -362,39 +379,40 @@ $ python3 linux-sdk-python/examples/audio/classify.py  /home/pi/.ei-linux-runner
 
 ### Cloud ML Integration
 
-As we have the keyword spotting working, we can develop an app that also takes advantage of the Cloud ML functionality. So, using the Python SDK I created a simple app that does the following:
+Now that we have the keyword spotting working, we can develop an app that also takes advantage of the Cloud ML functionality. So, using the Python SDK I created a simple app that does the following:
 - detects the *"Listen!"* keyword using the Edge Impulse model
 - when the keyword is spotted, records a couple seconds of audio
 - sends the recorded audio to the Cloud ML endpoint for voice-to-text transformation
 - displays the result / decoded text
 
-This is what the output of the app looks like:<br/>
+This is what the output of the app looks like:
+
 ![](.assets/3-14-edgimpl-app.png)
 
 The app is built up from the following Python classes / files:
 - `EdgeML` / *`edgeml.py`* - responsible for running the keyword spotting model, until a given keyword is detected
 - `Audio` / *`audio.py`* - contains the audio recording functionality, with silence detection
-- `CloudML` / *`cloudml.py`* - responsible for talking to the CloudML endpoint
+- `CloudML` / *`cloudml.py`* - responsible for talking to the Cloud ML endpoint
 - `main.py` - the entry point of the app, with a control loop linking the above parts together
 
 The source code of the app can be found in the `edgeml/python-app/` folder.
 
 ## Conclusions
 
-Using a combination of **Edge ML** and **Cloud ML** enables implementing smart solutions with advanced functionality on low power edge devices. Edge ML is great for simpler tasks such as audio and signal processing, while Cloud ML enables the addition more advanced functionality that would not otherwise possible on edge devices.
+Using a combination of **Edge ML** and **Cloud ML** enables the creation of smart solutions with advanced functionality on low power edge devices. Edge ML is great for simpler tasks such as audio and signal processing, while Cloud ML enables the addition of more advanced functionality that would not otherwise be possible on edge devices.
 
 Platforms like **Edge Impulse** and **Azure ML** enable developers to create machine learning solutions, without the need for deep knowledge of machine learning architectures and frameworks.
 
 ## References
 
-1. Azure Machine Learning Documentation<br/>
+1. Azure Machine Learning Documentation
    https://docs.microsoft.com/en-us/azure/machine-learning/
 
-2. Edge Impulse Documentation<br/>
+2. Edge Impulse Documentation
    https://docs.edgeimpulse.com/docs/
 
-3. Wav2vec 2.0: Learning the structure of speech from raw audio<br/>
+3. Wav2vec 2.0: Learning the structure of speech from raw audio
    https://ai.facebook.com/blog/wav2vec-20-learning-the-structure-of-speech-from-raw-audio/
 
-4. Realizing Machine Learning anywhere with Azure Kubernetes Service and Arc-enabled Machine Learning<br/>
+4. Realizing Machine Learning anywhere with Azure Kubernetes Service and Arc-enabled Machine Learning
    https://techcommunity.microsoft.com/t5/azure-arc-blog/realizing-machine-learning-anywhere-with-azure-kubernetes/ba-p/3470783
