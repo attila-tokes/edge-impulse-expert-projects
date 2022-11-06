@@ -18,11 +18,11 @@ The [nRF Edge Impulse](https://play.google.com/store/apps/details?id=no.nordicse
 
 To get started with the app we will need to create an Edge Impulse account, and a project:
 
-![m-01-create-project.png](.assets/m-01-create-project.png)
+![m-01-create-project-p40.png](.assets/m-01-create-project-p40.png)
 
 After this we should be able to detect the Thingy:53 in the Devices tab. The thingy will show up as a device named EdgeImpulse.
 
-![m-02-connect-device.png](.assets/m-02-connect-device.png)
+![m-02-connect-device-p40.png](.assets/m-02-connect-device-p40.png)
 
 Going to the Inference tab we can try out the pre-installed demo app, which uses the accelerometer data to detect 4 types of movement.
 
@@ -44,7 +44,7 @@ A the source of the audio samples I used a number of Youtube videos, listed in t
 
 The audio sample can be collected from the Data tab of the nRF Edge Impulse app:
 
-![m-03-capture.png](.assets/m-03-capture.png)
+![m-03-capture-p40.png](.assets/m-03-capture-p40.png)
 
 The audio samples are automatically uploaded to the Edge Impulse Studio project, and should show up in the Data Acquisition tab:
 
@@ -96,11 +96,11 @@ Building an deploying an embedded application including machine learning use to 
 
 We just need to go to the Deployment tab, and hit Deploy. The model will automatically start building:
 
-![m-04-build-n-deploy.png](.assets/m-04-build-n-deploy.png)
+![m-04-build-n-deploy-p40.png](.assets/m-04-build-n-deploy-p40.png)
 
 A couple of minutes later the model is built and deployed on our Thingy:53:
 
-![m-05-test.png](.assets/m-05-test.png)
+![m-05-test-p40.png](.assets/m-05-test-p40.png)
 
 ### Running Live Inference on the Thingy:53
 
